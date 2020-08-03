@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="NOMINA_AEROPORTUARIA_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DEPARTAMENTO">
+    <Key>
+      <PropertyRef Name="DepartamentoId" />
+    </Key>
+    <Property Name="DepartamentoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NombreDepartamento" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="FechaModificacion" Type="datetime" />
+  </EntityType>
+  <EntityType Name="NOMINA">
+    <Key>
+      <PropertyRef Name="NominaId" />
+    </Key>
+    <Property Name="NominaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FuncionId" Type="int" Nullable="false" />
+    <Property Name="Salario" Type="money" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="FechaModificacion" Type="datetime" />
+    <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Apellido" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Cedula" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="NombreCompleto" Type="varchar" MaxLength="401" StoreGeneratedPattern="Computed" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PUESTO">
+    <Key>
+      <PropertyRef Name="PuestoId" />
+    </Key>
+    <Property Name="PuestoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Funcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="DepartamentoId" Type="int" />
+    <Property Name="Multiplicidad" Type="int" Nullable="false" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="FechaModificacion" Type="datetime" />
+  </EntityType>
+  <EntityType Name="USERS">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserPassword" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'NOMINA_AEROPORTUARIA.dbo.VW_Nomina' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VW_Nomina">
+    <Key>
+      <PropertyRef Name="NominaId" />
+      <PropertyRef Name="FuncionId" />
+      <PropertyRef Name="Funcion" />
+      <PropertyRef Name="NombreCompleto" />
+      <PropertyRef Name="NombreDepartamento" />
+      <PropertyRef Name="Cedula" />
+    </Key>
+    <Property Name="NominaId" Type="int" Nullable="false" />
+    <Property Name="FuncionId" Type="int" Nullable="false" />
+    <Property Name="Funcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="NombreCompleto" Type="varchar" MaxLength="401" Nullable="false" />
+    <Property Name="Salario" Type="money" />
+    <Property Name="NombreDepartamento" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="DepartamentoId" Type="int" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="FechaModificacion" Type="datetime" />
+    <Property Name="Cedula" Type="varchar" MaxLength="11" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__NOMINA__FuncionI__534D60F1">
+    <End Role="PUESTO" Type="Self.PUESTO" Multiplicity="1" />
+    <End Role="NOMINA" Type="Self.NOMINA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PUESTO">
+        <PropertyRef Name="PuestoId" />
+      </Principal>
+      <Dependent Role="NOMINA">
+        <PropertyRef Name="FuncionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PUESTO__Departam__4CA06362">
+    <End Role="DEPARTAMENTO" Type="Self.DEPARTAMENTO" Multiplicity="0..1" />
+    <End Role="PUESTO" Type="Self.PUESTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DEPARTAMENTO">
+        <PropertyRef Name="DepartamentoId" />
+      </Principal>
+      <Dependent Role="PUESTO">
+        <PropertyRef Name="DepartamentoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="NOMINA_AEROPORTUARIA_ModelStoreContainer">
+    <EntitySet Name="DEPARTAMENTO" EntityType="Self.DEPARTAMENTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NOMINA" EntityType="Self.NOMINA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PUESTO" EntityType="Self.PUESTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VW_Nomina" EntityType="Self.VW_Nomina" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VW_Nomina].[NominaId] AS [NominaId], 
+    [VW_Nomina].[FuncionId] AS [FuncionId], 
+    [VW_Nomina].[Funcion] AS [Funcion], 
+    [VW_Nomina].[NombreCompleto] AS [NombreCompleto], 
+    [VW_Nomina].[Salario] AS [Salario], 
+    [VW_Nomina].[NombreDepartamento] AS [NombreDepartamento], 
+    [VW_Nomina].[DepartamentoId] AS [DepartamentoId], 
+    [VW_Nomina].[FechaCreacion] AS [FechaCreacion], 
+    [VW_Nomina].[FechaModificacion] AS [FechaModificacion], 
+    [VW_Nomina].[Cedula] AS [Cedula]
+    FROM [dbo].[VW_Nomina] AS [VW_Nomina]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__NOMINA__FuncionI__534D60F1" Association="Self.FK__NOMINA__FuncionI__534D60F1">
+      <End Role="PUESTO" EntitySet="PUESTO" />
+      <End Role="NOMINA" EntitySet="NOMINA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PUESTO__Departam__4CA06362" Association="Self.FK__PUESTO__Departam__4CA06362">
+      <End Role="DEPARTAMENTO" EntitySet="DEPARTAMENTO" />
+      <End Role="PUESTO" EntitySet="PUESTO" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

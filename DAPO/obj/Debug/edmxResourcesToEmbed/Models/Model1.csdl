@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="NOMINA_AEROPORTUARIA_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="DEPARTAMENTO">
+    <Key>
+      <PropertyRef Name="DepartamentoId" />
+    </Key>
+    <Property Name="DepartamentoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NombreDepartamento" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FechaModificacion" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="NOMINA">
+    <Key>
+      <PropertyRef Name="NominaId" />
+    </Key>
+    <Property Name="NominaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FuncionId" Type="Int32" Nullable="false" />
+    <Property Name="Salario" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FechaModificacion" Type="DateTime" Precision="3" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cedula" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NombreCompleto" Type="String" MaxLength="401" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+  </EntityType>
+  <EntityType Name="PUESTO">
+    <Key>
+      <PropertyRef Name="PuestoId" />
+    </Key>
+    <Property Name="PuestoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Funcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DepartamentoId" Type="Int32" />
+    <Property Name="Multiplicidad" Type="Int32" Nullable="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FechaModificacion" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="VW_Nomina">
+    <Key>
+      <PropertyRef Name="NominaId" />
+      <PropertyRef Name="FuncionId" />
+      <PropertyRef Name="Funcion" />
+      <PropertyRef Name="NombreCompleto" />
+      <PropertyRef Name="NombreDepartamento" />
+      <PropertyRef Name="Cedula" />
+    </Key>
+    <Property Name="NominaId" Type="Int32" Nullable="false" />
+    <Property Name="FuncionId" Type="Int32" Nullable="false" />
+    <Property Name="Funcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NombreCompleto" Type="String" MaxLength="401" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Salario" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="NombreDepartamento" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DepartamentoId" Type="Int32" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FechaModificacion" Type="DateTime" Precision="3" />
+    <Property Name="Cedula" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK__PUESTO__Departam__4CA06362">
+    <End Role="DEPARTAMENTO" Type="Self.DEPARTAMENTO" Multiplicity="0..1" />
+    <End Role="PUESTO" Type="Self.PUESTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DEPARTAMENTO">
+        <PropertyRef Name="DepartamentoId" />
+      </Principal>
+      <Dependent Role="PUESTO">
+        <PropertyRef Name="DepartamentoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NOMINA__FuncionI__534D60F1">
+    <End Role="PUESTO" Type="Self.PUESTO" Multiplicity="1" />
+    <End Role="NOMINA" Type="Self.NOMINA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PUESTO">
+        <PropertyRef Name="PuestoId" />
+      </Principal>
+      <Dependent Role="NOMINA">
+        <PropertyRef Name="FuncionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="NOMINA_AEROPORTUARIA_Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DEPARTAMENTOes" EntityType="Self.DEPARTAMENTO" />
+    <EntitySet Name="NOMINAs" EntityType="Self.NOMINA" />
+    <EntitySet Name="PUESTOes" EntityType="Self.PUESTO" />
+    <EntitySet Name="VW_Nomina" EntityType="Self.VW_Nomina" />
+    <AssociationSet Name="FK__PUESTO__Departam__4CA06362" Association="Self.FK__PUESTO__Departam__4CA06362">
+      <End Role="DEPARTAMENTO" EntitySet="DEPARTAMENTOes" />
+      <End Role="PUESTO" EntitySet="PUESTOes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NOMINA__FuncionI__534D60F1" Association="Self.FK__NOMINA__FuncionI__534D60F1">
+      <End Role="PUESTO" EntitySet="PUESTOes" />
+      <End Role="NOMINA" EntitySet="NOMINAs" />
+    </AssociationSet>
+    <EntitySet Name="USERS" EntityType="NOMINA_AEROPORTUARIA_Model.USER" />
+  </EntityContainer>
+  <EntityType Name="USER">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="UserPassword" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
